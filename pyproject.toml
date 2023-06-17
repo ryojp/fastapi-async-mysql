@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fastapi-async-mysql"
+version = "0.1.0"
+description = ""
+authors = ["Ryo Koike <ryok022366@gmail.com>"]
+readme = "README.md"
+packages = [{include = "fastapi_async_mysql"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.97.0"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
+aiomysql = "^0.2.0"
+databases = {extras = ["aiomysql"], version = "^0.7.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
