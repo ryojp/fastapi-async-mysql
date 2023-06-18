@@ -1,0 +1,23 @@
+#------------
+# Just realized that 'delay' fault is for HTTP
+# So, it does not work with MySQL (TCP)...
+#------------
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: mysql-vs
+  namespace: demo
+spec:
+  hosts:
+  - slow-mysql
+  http:
+  - fault:
+      delay:
+        fixedDelay: 3s
+        percentage:
+          value: 100
+    route:
+    - destination:
+        host: mysql.demo.svc.cluster.local
+        port:
+          number: 3306

@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi
+  namespace: demo
+spec:
+  type: ClusterIP
+  selector:
+    app: fastapi
+  ports:
+  - port: 80
+    targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+      - name: fastapi
+        image: ryojpn/fastapi-async-mysql
+        resources:
+          limits:
+            memory: 128Mi
+            cpu: 500m
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PORT
+          value: '8000'
+        - name: MYSQL_HOST
+          value:  mysql.demo.svc.cluster.local:3306
+          # value:  slow-mysql
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mysql
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql
+              key: MYSQL_PASSWORD
